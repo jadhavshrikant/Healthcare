@@ -45,7 +45,11 @@ namespace Healthcare.Web
                   OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
 
+<<<<<<< HEAD
             proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("CommonUtilityService.svc");
+=======
+            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("ICommonUtilityService", "CommonUtilityService.svc");
+>>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
 
             if (!this.IsPostBack)
             {

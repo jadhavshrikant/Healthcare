@@ -30,8 +30,14 @@ namespace Healthcare.WCFServiceClient
         /// <summary>
         /// ServiceClient
         /// </summary>
+<<<<<<< HEAD
         /// <param name="serviceName"></param>
         public ServiceClient(string serviceName)
+=======
+        /// <param name="endpoint"></param>
+        /// <param name="serviceName"></param>
+        public ServiceClient(string endpoint, string serviceName)
+>>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
         {
             serviceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
             BasicHttpBinding binding = new BasicHttpBinding();

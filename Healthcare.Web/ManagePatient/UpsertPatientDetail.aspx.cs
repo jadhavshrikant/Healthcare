@@ -95,8 +95,13 @@ namespace Healthcare.Web.ManagePatient
                   OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
 
+<<<<<<< HEAD
             proxyPatientDetailService = new ServiceClient<IPatientDetailService>("PatientDetailService.svc");
             proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("CommonUtilityService.svc");
+=======
+            proxyPatientDetailService = new ServiceClient<IPatientDetailService>("IPatientDetailService", "PatientDetailService.svc");
+            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("ICommonUtilityService", "CommonUtilityService.svc");
+>>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
 
             if (!this.IsPostBack)
             {

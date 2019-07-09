@@ -65,7 +65,11 @@ namespace Healthcare.Web
                   new AuthenticationProperties { RedirectUri = "/" },
                   OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
+<<<<<<< HEAD
             proxyUserDetailService = new ServiceClient<IUserDetailService>("UserDetailService.svc");
+=======
+            proxyUserDetailService = new ServiceClient<IUserDetailService>("IUserDetailService", "UserDetailService.svc");
+>>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
         }
 
         /// <summary>
