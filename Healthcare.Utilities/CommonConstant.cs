@@ -9,6 +9,13 @@ namespace Healthcare.Utilities
     /// </summary>
     public static class CommonConstant
     {
+        #region Properties
+        /// <summary>
+        /// ServiceAddressURL
+        /// </summary>
+        public static string ServiceAddressURL { get; set; }
+        #endregion
+
         #region Enums
 
         /// <summary>

@@ -3,14 +3,15 @@ using Healthcare.Models.UserDetail;
 using Healthcare.Utilities;
 using Healthcare.WCFServiceClient;
 using Healthcare.WCFServiceInterface.UserDetail;
-using Healthcare.Web.App_Code;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OpenIdConnect;
 using System;
+using System.Security.Claims;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Configuration;
 #endregion
 
 namespace Healthcare.Web
@@ -59,17 +60,8 @@ namespace Healthcare.Web
         /// </summary>
         private void loadDefaultMethod()
         {
-            if (!Request.IsAuthenticated)
-            {
-                HttpContext.Current.GetOwinContext().Authentication.Challenge(
-                  new AuthenticationProperties { RedirectUri = "/" },
-                  OpenIdConnectAuthenticationDefaults.AuthenticationType);
-            }
-<<<<<<< HEAD
-            proxyUserDetailService = new ServiceClient<IUserDetailService>("UserDetailService.svc");
-=======
-            proxyUserDetailService = new ServiceClient<IUserDetailService>("IUserDetailService", "UserDetailService.svc");
->>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
+            CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
+            proxyUserDetailService = new ServiceClient<IUserDetailService>(CommonConstant.ServiceAddressURL + "UserDetailService.svc");
         }
 
         /// <summary>
@@ -79,7 +71,7 @@ namespace Healthcare.Web
         {
             Page.Validate("loginForm");
             if (Page.IsValid)
-            {  
+            {
                 HtmlControl divControl = (HtmlControl)ucNotification.FindControl("dvError");
                 divControl.Visible = false;
                 Label lblErrorMessage = (Label)ucNotification.FindControl("lblErrorMessage");
@@ -93,10 +85,17 @@ namespace Healthcare.Web
                     bool isValid = false;
                     if (null != userModel)
                     {
-                        if (userModel.ResultType == (int)CommonConstant.ReturnResult.Success) //Valid User
+                        if (userModel.ResultType == (int)CommonConstant.ReturnResult.Success)
                         {
+                            string userJsonStr = CommonMethod.ConvertObjectToJsonString<UserModel>(userModel);
+                            var authentication = HttpContext.Current.GetOwinContext().Authentication;
+                            authentication.SignIn(
+                                    new AuthenticationProperties { IsPersistent = false, AllowRefresh = true },
+                                    new ClaimsIdentity(new[] {
+                                        new Claim(ClaimsIdentity.DefaultNameClaimType, userJsonStr)},
+                                    DefaultAuthenticationTypes.ApplicationCookie)
+                                );
                             isValid = true;
-                            SessionManager.setUserSession(userModel);
                             Response.Redirect("~/Dashboard.aspx");
                         }
                     }

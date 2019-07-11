@@ -3,10 +3,12 @@ using Healthcare.Models.PatientDetail;
 using Healthcare.Utilities;
 using Healthcare.WCFServiceClient;
 using Healthcare.WCFServiceInterface.PatientDetail;
+using Healthcare.Web.App_Code;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OpenIdConnect;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -17,7 +19,7 @@ namespace Healthcare.Web.ManagePatient
     /// <summary>
     /// PatientList
     /// </summary>
-    public partial class PatientList : System.Web.UI.Page
+    public partial class PatientList : BasePage
     {
         #region Properties
 
@@ -106,11 +108,8 @@ namespace Healthcare.Web.ManagePatient
                   OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
 
-<<<<<<< HEAD
-            proxyPatientDetailService = new ServiceClient<IPatientDetailService>("PatientDetailService.svc");
-=======
-            proxyPatientDetailService = new ServiceClient<IPatientDetailService>("IPatientDetailService", "PatientDetailService.svc");
->>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
+            CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
+            proxyPatientDetailService = new ServiceClient<IPatientDetailService>(CommonConstant.ServiceAddressURL + "PatientDetailService.svc");
 
             if (!this.IsPostBack)
             {

@@ -1,6 +1,5 @@
 ﻿#region Namespace
 using System;
-using System.Configuration;
 using System.ServiceModel;
 #endregion
 
@@ -15,14 +14,10 @@ namespace Healthcare.WCFServiceClient
         #region Properties
 
         /// <summary>
-        /// Channel
+        /// channel
         /// </summary>
-        public ChannelFactory<T> Channel { get; set; }
+        public ChannelFactory<T> channel { get; set; }
 
-        /// <summary>
-        /// serviceAddressURL
-        /// </summary>
-        public string serviceAddressURL { get; }
         #endregion
 
         #region Constructor
@@ -30,19 +25,12 @@ namespace Healthcare.WCFServiceClient
         /// <summary>
         /// ServiceClient
         /// </summary>
-<<<<<<< HEAD
-        /// <param name="serviceName"></param>
-        public ServiceClient(string serviceName)
-=======
-        /// <param name="endpoint"></param>
-        /// <param name="serviceName"></param>
-        public ServiceClient(string endpoint, string serviceName)
->>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
+        /// <param name="endpointAddressUrl"></param>
+        public ServiceClient(string endpointAddressUrl)
         {
-            serviceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
             BasicHttpBinding binding = new BasicHttpBinding();
-            EndpointAddress endpointAddress = new EndpointAddress(serviceAddressURL + serviceName);
-            Channel = new ChannelFactory<T>(binding, endpointAddress);
+            EndpointAddress endpointAddress = new EndpointAddress(endpointAddressUrl);
+            channel = new ChannelFactory<T>(binding, endpointAddress);
         }
         #endregion
 
@@ -54,7 +42,7 @@ namespace Healthcare.WCFServiceClient
         /// <returns></returns>
         public T CreateChannel()
         {
-            return Channel.CreateChannel();
+            return channel.CreateChannel();
         }
 
         /// <summary>
@@ -64,9 +52,7 @@ namespace Healthcare.WCFServiceClient
         public void Execute(Action<T> action)
         {
             T proxy = CreateChannel();
-
             action(proxy);
-
             ((ICommunicationObject)proxy).Close();
         }
 
@@ -79,11 +65,8 @@ namespace Healthcare.WCFServiceClient
         public TResult Execute<TResult>(Func<T, TResult> function)
         {
             T proxy = CreateChannel();
-
             var result = function(proxy);
-
             ((ICommunicationObject)proxy).Close();
-
             return result;
         }
         #endregion

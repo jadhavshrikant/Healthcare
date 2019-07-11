@@ -1,11 +1,11 @@
 ﻿#region Namespace
 using Healthcare.Models.DashboardDetail;
+using Healthcare.Utilities;
 using Healthcare.WCFServiceClient;
 using Healthcare.WCFServiceInterface.Common;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OpenIdConnect;
+using Healthcare.Web.App_Code;
 using System;
-using System.Web;
+using System.Configuration;
 #endregion
 
 namespace Healthcare.Web
@@ -13,7 +13,7 @@ namespace Healthcare.Web
     /// <summary>
     /// Dashboard
     /// </summary>
-    public partial class Dashboard : System.Web.UI.Page
+    public partial class Dashboard : BasePage
     {
         #region Properties
         /// <summary>
@@ -38,18 +38,8 @@ namespace Healthcare.Web
         #region Methods
         private void loadDefaultMethod()
         {
-            if (!Request.IsAuthenticated)
-            {
-                HttpContext.Current.GetOwinContext().Authentication.Challenge(
-                  new AuthenticationProperties { RedirectUri = "/" },
-                  OpenIdConnectAuthenticationDefaults.AuthenticationType);
-            }
-
-<<<<<<< HEAD
-            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("CommonUtilityService.svc");
-=======
-            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("ICommonUtilityService", "CommonUtilityService.svc");
->>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
+            CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
+            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>(CommonConstant.ServiceAddressURL + "CommonUtilityService.svc");
 
             if (!this.IsPostBack)
             {

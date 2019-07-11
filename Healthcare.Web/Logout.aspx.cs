@@ -1,12 +1,7 @@
 ﻿#region Namespace
-using Healthcare.Web.App_Code;
 using Microsoft.Owin.Security.Cookies;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 #endregion
 
 namespace Healthcare.Web
@@ -36,7 +31,6 @@ namespace Healthcare.Web
         private void loadDefaultMethod()
         {
             Context.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            //SessionManager.clearUserSession();
             Response.Redirect("Default.aspx");
         }
         #endregion

@@ -6,14 +6,17 @@ using Healthcare.Utilities;
 using Healthcare.WCFServiceClient;
 using Healthcare.WCFServiceInterface.Common;
 using Healthcare.WCFServiceInterface.PatientDetail;
-using Healthcare.Web.App_Code;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OpenIdConnect;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Security.Claims;
+using Healthcare.Models.UserDetail;
+using Healthcare.Web.App_Code;
 #endregion
 
 namespace Healthcare.Web.ManagePatient
@@ -21,19 +24,21 @@ namespace Healthcare.Web.ManagePatient
     /// <summary>
     /// UpsertPatientDetail
     /// </summary>
-    public partial class UpsertPatientDetail : System.Web.UI.Page
+    public partial class UpsertPatientDetail : BasePage
     {
         #region Properties
 
         /// <summary>
         /// proxyPatientDetailService
         /// </summary>
-        ServiceClient<IPatientDetailService> proxyPatientDetailService = null;
+        private ServiceClient<IPatientDetailService> proxyPatientDetailService = null;
 
         /// <summary>
         /// proxyCommonUtilityService
         /// </summary>
-        ServiceClient<ICommonUtilityService> proxyCommonUtilityService = null;
+        private ServiceClient<ICommonUtilityService> proxyCommonUtilityService = null;
+
+        private int? userID = null;
 
         #endregion
 
@@ -95,13 +100,13 @@ namespace Healthcare.Web.ManagePatient
                   OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
 
-<<<<<<< HEAD
-            proxyPatientDetailService = new ServiceClient<IPatientDetailService>("PatientDetailService.svc");
-            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("CommonUtilityService.svc");
-=======
-            proxyPatientDetailService = new ServiceClient<IPatientDetailService>("IPatientDetailService", "PatientDetailService.svc");
-            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>("ICommonUtilityService", "CommonUtilityService.svc");
->>>>>>> 9c74699afce7e777e749dcc93555422342078b5b
+            CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
+            proxyPatientDetailService = new ServiceClient<IPatientDetailService>(CommonConstant.ServiceAddressURL + "PatientDetailService.svc");
+            proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>(CommonConstant.ServiceAddressURL + "CommonUtilityService.svc");
+
+            var identity = User.Identity as ClaimsIdentity;
+            UserModel userModel = CommonMethod.ConvertJsonStringToObject<UserModel>(identity.Name);
+            userID = userModel.UserId;
 
             if (!this.IsPostBack)
             {
@@ -195,7 +200,7 @@ namespace Healthcare.Web.ManagePatient
                     patientModel.ContactNo = txtContactNo.Text;
                     patientModel.Occupation = txtOccupation.Text;
                     patientModel.PatientId = Convert.ToInt32(hfPatientId.Value);
-                    patientModel.UserId = SessionManager.getUserId();
+                    patientModel.UserId = userID.Value;
 
                     string result = proxyPatientDetailService.Execute(prxy => prxy.upsertPatientDetail(patientModel));
 

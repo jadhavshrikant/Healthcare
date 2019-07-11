@@ -1,76 +1,44 @@
 ﻿#region Namespace
-using IdentityModel.Client;
 using Microsoft.AspNet.Identity;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Security.Claims;
 [assembly: OwinStartup(typeof(Healthcare.Web.Startup))]
 #endregion
 
 namespace Healthcare.Web
 {
+    /// <summary>
+    /// Startup
+    /// </summary>
     public class Startup
     {
-        // These values are stored in Web.config. Make sure you update them!
-        private readonly string _clientId = ConfigurationManager.AppSettings["okta:ClientId"];
-        private readonly string _redirectUri = ConfigurationManager.AppSettings["okta:RedirectUri"];
-        private readonly string _authority = ConfigurationManager.AppSettings["okta:OrgUri"];
-        private readonly string _clientSecret = ConfigurationManager.AppSettings["okta:ClientSecret"];
-
+        /// <summary>
+        /// Configuration
+        /// </summary>
+        /// <param name="app"></param>
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
         }
 
+        /// <summary>
+        /// ConfigureAuth
+        /// </summary>
+        /// <param name="app"></param>
         public void ConfigureAuth(IAppBuilder app)
         {
-            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
-            app.UseCookieAuthentication(new CookieAuthenticationOptions());
-
-            app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
+            string tokenExpireTimeInMinute = ConfigurationManager.AppSettings["TokenExpireTimeInMinute"];
+            int expireTimeSpan = 10; //default
+            int.TryParse(tokenExpireTimeInMinute, out expireTimeSpan);
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                ClientId = _clientId,
-                ClientSecret = _clientSecret,
-                Authority = _authority,
-                RedirectUri = _redirectUri,
-                ResponseType = OpenIdConnectResponseType.CodeIdToken,
-                Scope = OpenIdConnectScope.OpenIdProfile,
-                TokenValidationParameters = new TokenValidationParameters { NameClaimType = "name" },
-                Notifications = new OpenIdConnectAuthenticationNotifications
-                {
-                    AuthorizationCodeReceived = async n =>
-                    {
-                        // Exchange code for access and ID tokens
-                        var tokenClient = new TokenClient($"{_authority}/v1/token", _clientId, _clientSecret);
-
-                        var tokenResponse = await tokenClient.RequestAuthorizationCodeAsync(n.Code, _redirectUri);
-                        if (tokenResponse.IsError)
-                        {
-                            throw new Exception(tokenResponse.Error);
-                        }
-
-                        var userInfoClient = new UserInfoClient($"{_authority}/v1/userinfo");
-                        var userInfoResponse = await userInfoClient.GetAsync(tokenResponse.AccessToken);
-
-                        var claims = new List<Claim>(userInfoResponse.Claims)
-          {
-            new Claim("id_token", tokenResponse.IdentityToken),
-            new Claim("access_token", tokenResponse.AccessToken)
-          };
-
-                        n.AuthenticationTicket.Identity.AddClaims(claims);
-                    },
-                },
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                SlidingExpiration = true,
+                ExpireTimeSpan = new TimeSpan(0, expireTimeSpan, 0),
+                LoginPath = new PathString("/Default.aspx")
             });
         }
     }

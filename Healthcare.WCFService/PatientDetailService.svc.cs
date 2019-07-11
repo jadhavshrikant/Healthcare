@@ -13,6 +13,9 @@ namespace Healthcare.WCFService
     public class PatientDetailService : IPatientDetailService
     {
         #region Properties
+        /// <summary>
+        /// patientDetailProvider
+        /// </summary>
         private readonly IPatientDetailProvider patientDetailProvider;
         #endregion
 
