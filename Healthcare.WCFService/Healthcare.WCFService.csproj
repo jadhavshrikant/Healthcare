@@ -111,13 +111,12 @@
       <DependentUpon>PatientDetailService.svc</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenValidator.cs" />
     <Compile Include="UserDetailService.svc.cs">
       <DependentUpon>UserDetailService.svc</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
@@ -139,6 +138,10 @@
     <ProjectReference Include="..\Healthcare.Repository\Healthcare.Repository.csproj">
       <Project>{26329617-8ac0-4a17-aa70-07b2a7907904}</Project>
       <Name>Healthcare.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Healthcare.Utilities\Healthcare.Utilities.csproj">
+      <Project>{5C8A40AF-8C91-4112-B1BF-B48BD16F6DF2}</Project>
+      <Name>Healthcare.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Healthcare.WCFServiceInterface\Healthcare.WCFServiceInterface.csproj">
       <Project>{b45f7715-36db-4255-8577-12ea09b0e67f}</Project>

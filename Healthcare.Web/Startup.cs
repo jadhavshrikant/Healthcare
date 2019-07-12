@@ -31,7 +31,7 @@ namespace Healthcare.Web
         public void ConfigureAuth(IAppBuilder app)
         {
             string tokenExpireTimeInMinute = ConfigurationManager.AppSettings["TokenExpireTimeInMinute"];
-            int expireTimeSpan = 10; //default
+            int expireTimeSpan = 15; //default
             int.TryParse(tokenExpireTimeInMinute, out expireTimeSpan);
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {

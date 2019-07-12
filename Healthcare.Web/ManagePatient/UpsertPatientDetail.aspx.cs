@@ -38,7 +38,15 @@ namespace Healthcare.Web.ManagePatient
         /// </summary>
         private ServiceClient<ICommonUtilityService> proxyCommonUtilityService = null;
 
+        /// <summary>
+        /// userID
+        /// </summary>
         private int? userID = null;
+
+        /// <summary>
+        /// token
+        /// </summary>
+        public string token { get; set; }
 
         #endregion
 
@@ -105,6 +113,7 @@ namespace Healthcare.Web.ManagePatient
             proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>(CommonConstant.ServiceAddressURL + "CommonUtilityService.svc");
 
             var identity = User.Identity as ClaimsIdentity;
+            token = identity.Name;
             UserModel userModel = CommonMethod.ConvertJsonStringToObject<UserModel>(identity.Name);
             userID = userModel.UserId;
 
@@ -127,7 +136,7 @@ namespace Healthcare.Web.ManagePatient
                 lblHeading.InnerText = "Update Patient";
                 int patientId = Convert.ToInt32(Request.QueryString["patientId"].ToString());
 
-                PatientModel patientModel = proxyPatientDetailService.Execute(prxy => prxy.getPatientDetail(patientId));
+                PatientModel patientModel = proxyPatientDetailService.Execute(prxy => prxy.getPatientDetail(patientId), token);
 
                 //Assign values to web form controls
                 hfPatientId.Value = Convert.ToString(patientModel.PatientId);
@@ -162,13 +171,13 @@ namespace Healthcare.Web.ManagePatient
         /// </summary>
         private void bindDropDownList()
         {
-            List<SalutationModel> lstSalutations = proxyCommonUtilityService.Execute(prxy => prxy.getSalutations());
+            List<SalutationModel> lstSalutations = proxyCommonUtilityService.Execute(prxy => prxy.getSalutations(), token);
             ddlSalutation.DataSource = lstSalutations;
             ddlSalutation.DataValueField = "SalutationId";
             ddlSalutation.DataTextField = "Salutation";
             ddlSalutation.DataBind();
 
-            List<MaritalStatusModel> lstMaritalStatuses = proxyCommonUtilityService.Execute(prxy => prxy.getMaritals());
+            List<MaritalStatusModel> lstMaritalStatuses = proxyCommonUtilityService.Execute(prxy => prxy.getMaritals(), token);
             ddlMaritalStatus.DataSource = lstMaritalStatuses;
             ddlMaritalStatus.DataValueField = "MaritalStatusId";
             ddlMaritalStatus.DataTextField = "MaritalStatus";
@@ -202,7 +211,7 @@ namespace Healthcare.Web.ManagePatient
                     patientModel.PatientId = Convert.ToInt32(hfPatientId.Value);
                     patientModel.UserId = userID.Value;
 
-                    string result = proxyPatientDetailService.Execute(prxy => prxy.upsertPatientDetail(patientModel));
+                    string result = proxyPatientDetailService.Execute(prxy => prxy.upsertPatientDetail(patientModel), token);
 
                     if (!string.IsNullOrEmpty(result) && result == Convert.ToString((int)CommonConstant.Notification.Success))
                     {

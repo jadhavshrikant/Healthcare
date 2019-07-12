@@ -87,12 +87,11 @@ namespace Healthcare.Web
                     {
                         if (userModel.ResultType == (int)CommonConstant.ReturnResult.Success)
                         {
-                            string userJsonStr = CommonMethod.ConvertObjectToJsonString<UserModel>(userModel);
                             var authentication = HttpContext.Current.GetOwinContext().Authentication;
                             authentication.SignIn(
                                     new AuthenticationProperties { IsPersistent = false, AllowRefresh = true },
                                     new ClaimsIdentity(new[] {
-                                        new Claim(ClaimsIdentity.DefaultNameClaimType, userJsonStr)},
+                                        new Claim(ClaimsIdentity.DefaultNameClaimType, userModel.Token)},
                                     DefaultAuthenticationTypes.ApplicationCookie)
                                 );
                             isValid = true;

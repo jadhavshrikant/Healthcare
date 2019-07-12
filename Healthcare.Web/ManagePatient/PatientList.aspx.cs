@@ -1,5 +1,6 @@
 ﻿#region Namespace
 using Healthcare.Models.PatientDetail;
+using Healthcare.Models.UserDetail;
 using Healthcare.Utilities;
 using Healthcare.WCFServiceClient;
 using Healthcare.WCFServiceInterface.PatientDetail;
@@ -9,6 +10,7 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Security.Claims;
 using System.Web;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -27,6 +29,11 @@ namespace Healthcare.Web.ManagePatient
         /// proxyPatientDetailService
         /// </summary>
         ServiceClient<IPatientDetailService> proxyPatientDetailService = null;
+
+        /// <summary>
+        /// token
+        /// </summary>
+        public string token { get; set; }
         #endregion
 
         #region Events
@@ -70,7 +77,7 @@ namespace Healthcare.Web.ManagePatient
                 int rowIndex = int.Parse(e.CommandArgument.ToString());
                 int patientId = Convert.ToInt32(Convert.ToString(gvPatientList.DataKeys[rowIndex]["PatientId"]));
 
-                string result = proxyPatientDetailService.Execute(prxy => prxy.deletetPatientDetail(patientId));
+                string result = proxyPatientDetailService.Execute(prxy => prxy.deletetPatientDetail(patientId), token);
 
                 HtmlControl divErrorControl = (HtmlControl)ucNotification.FindControl("dvError");
                 HtmlControl divSuccessControl = (HtmlControl)ucNotification.FindControl("dvSuccess");
@@ -111,6 +118,10 @@ namespace Healthcare.Web.ManagePatient
             CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
             proxyPatientDetailService = new ServiceClient<IPatientDetailService>(CommonConstant.ServiceAddressURL + "PatientDetailService.svc");
 
+            var identity = User.Identity as ClaimsIdentity;
+            token = identity.Name;
+            UserModel userModel = CommonMethod.ConvertJsonStringToObject<UserModel>(identity.Name);
+
             if (!this.IsPostBack)
             {
                 bindPatientList();
@@ -122,12 +133,10 @@ namespace Healthcare.Web.ManagePatient
         /// </summary>
         private void bindPatientList()
         {
-            List<PatientModel> lstPatients = proxyPatientDetailService.Execute(prxy => prxy.getPatients());
+            List<PatientModel> lstPatients = proxyPatientDetailService.Execute(prxy => prxy.getPatients(), token);
             gvPatientList.DataSource = lstPatients;
             gvPatientList.DataBind();
         }
-
-
 
         #endregion 
     }

@@ -1,11 +1,13 @@
 ﻿#region Namespace
 using Healthcare.Models.DashboardDetail;
+using Healthcare.Models.UserDetail;
 using Healthcare.Utilities;
 using Healthcare.WCFServiceClient;
 using Healthcare.WCFServiceInterface.Common;
 using Healthcare.Web.App_Code;
 using System;
 using System.Configuration;
+using System.Security.Claims;
 #endregion
 
 namespace Healthcare.Web
@@ -20,6 +22,11 @@ namespace Healthcare.Web
         /// proxyCommonUtilityService
         /// </summary>
         ServiceClient<ICommonUtilityService> proxyCommonUtilityService = null;
+
+        /// <summary>
+        /// token
+        /// </summary>
+        public string token { get; set; }
         #endregion
 
         #region Events
@@ -41,6 +48,10 @@ namespace Healthcare.Web
             CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
             proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>(CommonConstant.ServiceAddressURL + "CommonUtilityService.svc");
 
+            var identity = User.Identity as ClaimsIdentity;
+            token = identity.Name;
+            UserModel userModel = CommonMethod.ConvertJsonStringToObject<UserModel>(identity.Name);            
+
             if (!this.IsPostBack)
             {
                 bindDashboardItems();
@@ -52,7 +63,7 @@ namespace Healthcare.Web
         /// </summary>
         private void bindDashboardItems()
         {
-            DashboardModel dashboardModel = proxyCommonUtilityService.Execute(prxy => prxy.getDashboardItems());
+            DashboardModel dashboardModel = proxyCommonUtilityService.Execute(prxy => prxy.getDashboardItems(), token);
             if (null != dashboardModel)
             {
                 lblTotalPatient.Text = Convert.ToString(dashboardModel.TotalPatient);

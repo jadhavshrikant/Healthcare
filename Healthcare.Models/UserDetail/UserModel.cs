@@ -22,6 +22,8 @@ namespace Healthcare.Models.UserDetail
         public string LastName { get; set; }
         public bool IsActive { get; set; }
         public int ResultType { get; set; }
+        public DateTime TokenCreated { get; set; }
+        public string Token { get; set; }
 
         #endregion
     }

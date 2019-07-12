@@ -1,6 +1,7 @@
 ﻿#region Namespace
 using Healthcare.BusinessLayer.UserDetail;
 using Healthcare.Models.UserDetail;
+using Healthcare.Utilities;
 using Healthcare.WCFServiceInterface.UserDetail;
 using System;
 using System.ServiceModel;
@@ -40,7 +41,10 @@ namespace Healthcare.WCFService
         {
             try
             {
-                return userDetailProvider.authenticateUser(userDetail);
+                userDetail = userDetailProvider.authenticateUser(userDetail);
+                userDetail.TokenCreated = DateTime.Now;
+                userDetail.Token = CommonMethod.ConvertObjectToJsonString<UserModel>(userDetail);
+                return userDetail;
             }
             catch (Exception ex)
             {
