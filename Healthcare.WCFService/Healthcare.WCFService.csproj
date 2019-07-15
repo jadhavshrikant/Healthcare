@@ -101,6 +101,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CustomErrorHandler.cs" />
+    <Compile Include="Attributes\ErrorHandlerAttribute.cs" />
     <Compile Include="CommonUtilityService.svc.cs">
       <DependentUpon>CommonUtilityService.svc</DependentUpon>
     </Compile>
@@ -111,7 +113,6 @@
       <DependentUpon>PatientDetailService.svc</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TokenValidator.cs" />
     <Compile Include="UserDetailService.svc.cs">
       <DependentUpon>UserDetailService.svc</DependentUpon>
     </Compile>
@@ -130,6 +131,10 @@
     <ProjectReference Include="..\Healthcare.BusinessLayer\Healthcare.BusinessLayer.csproj">
       <Project>{25038153-98f4-4912-9e5e-cca05cbf7d17}</Project>
       <Name>Healthcare.BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Healthcare.Logging\Healthcare.Logging.csproj">
+      <Project>{1edc11b9-eb5a-436f-a72c-04d493c996d4}</Project>
+      <Name>Healthcare.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\Healthcare.Models\Healthcare.Models.csproj">
       <Project>{ed1c1fd9-d7fb-4390-be5e-0b0c69eff974}</Project>

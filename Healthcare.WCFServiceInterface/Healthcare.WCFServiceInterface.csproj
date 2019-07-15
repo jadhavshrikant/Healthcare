@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,16 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ValidateTokenAttribute.cs" />
     <Compile Include="Common\ICommonUtilityService.cs" />
-    <Compile Include="IValidateUserService.cs" />
     <Compile Include="PatientDetail\IPatientDetailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenValidator.cs" />
     <Compile Include="UserDetail\IUserDetailService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Healthcare.Models\Healthcare.Models.csproj">
       <Project>{ed1c1fd9-d7fb-4390-be5e-0b0c69eff974}</Project>
       <Name>Healthcare.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Healthcare.Utilities\Healthcare.Utilities.csproj">
+      <Project>{5c8a40af-8c91-4112-b1bf-b48bd16f6df2}</Project>
+      <Name>Healthcare.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

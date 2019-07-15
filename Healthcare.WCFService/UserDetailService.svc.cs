@@ -2,9 +2,9 @@
 using Healthcare.BusinessLayer.UserDetail;
 using Healthcare.Models.UserDetail;
 using Healthcare.Utilities;
+using Healthcare.WCFService.Attributes;
 using Healthcare.WCFServiceInterface.UserDetail;
 using System;
-using System.ServiceModel;
 #endregion
 
 namespace Healthcare.WCFService
@@ -12,6 +12,7 @@ namespace Healthcare.WCFService
     /// <summary>
     /// UserDetailService
     /// </summary>
+    [ErrorHandler(typeof(CustomErrorHandler))]
     public class UserDetailService : IUserDetailService
     {
         #region Properties
@@ -39,17 +40,10 @@ namespace Healthcare.WCFService
         /// <returns></returns>
         public UserModel authenticateUser(UserModel userDetail)
         {
-            try
-            {
-                userDetail = userDetailProvider.authenticateUser(userDetail);
-                userDetail.TokenCreated = DateTime.Now;
-                userDetail.Token = CommonMethod.ConvertObjectToJsonString<UserModel>(userDetail);
-                return userDetail;
-            }
-            catch (Exception ex)
-            {
-                throw new FaultException(ex.Message);
-            }
+            userDetail = userDetailProvider.authenticateUser(userDetail);
+            userDetail.TokenCreated = DateTime.Now;
+            userDetail.Token = CommonMethod.ConvertObjectToJsonString<UserModel>(userDetail);
+            return userDetail;
         }
         #endregion
     }
