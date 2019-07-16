@@ -38,16 +38,6 @@ namespace Healthcare.Web.ManagePatient
         /// </summary>
         private ServiceClient<ICommonUtilityService> proxyCommonUtilityService = null;
 
-        /// <summary>
-        /// userID
-        /// </summary>
-        private int? userID = null;
-
-        /// <summary>
-        /// token
-        /// </summary>
-        public string token { get; set; }
-
         #endregion
 
         #region Events
@@ -101,21 +91,9 @@ namespace Healthcare.Web.ManagePatient
         /// </summary>
         private void loadDefaultMethod()
         {
-            if (!Request.IsAuthenticated)
-            {
-                HttpContext.Current.GetOwinContext().Authentication.Challenge(
-                  new AuthenticationProperties { RedirectUri = "/" },
-                  OpenIdConnectAuthenticationDefaults.AuthenticationType);
-            }
-
             CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
             proxyPatientDetailService = new ServiceClient<IPatientDetailService>(CommonConstant.ServiceAddressURL + "PatientDetailService.svc");
             proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>(CommonConstant.ServiceAddressURL + "CommonUtilityService.svc");
-
-            var identity = User.Identity as ClaimsIdentity;
-            token = identity.Name;
-            UserModel userModel = CommonMethod.ConvertJsonStringToObject<UserModel>(identity.Name);
-            userID = userModel.UserId;
 
             if (!this.IsPostBack)
             {
@@ -209,7 +187,7 @@ namespace Healthcare.Web.ManagePatient
                     patientModel.ContactNo = txtContactNo.Text;
                     patientModel.Occupation = txtOccupation.Text;
                     patientModel.PatientId = Convert.ToInt32(hfPatientId.Value);
-                    patientModel.UserId = userID.Value;
+                    patientModel.UserId = userId;
 
                     string result = proxyPatientDetailService.Execute(prxy => prxy.upsertPatientDetail(patientModel), token);
 

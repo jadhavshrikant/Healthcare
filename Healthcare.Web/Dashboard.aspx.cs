@@ -22,11 +22,6 @@ namespace Healthcare.Web
         /// proxyCommonUtilityService
         /// </summary>
         ServiceClient<ICommonUtilityService> proxyCommonUtilityService = null;
-
-        /// <summary>
-        /// token
-        /// </summary>
-        public string token { get; set; }
         #endregion
 
         #region Events
@@ -51,10 +46,6 @@ namespace Healthcare.Web
         {
             CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];
             proxyCommonUtilityService = new ServiceClient<ICommonUtilityService>(CommonConstant.ServiceAddressURL + "CommonUtilityService.svc");
-
-            var identity = User.Identity as ClaimsIdentity;
-            token = identity.Name;
-            UserModel userModel = CommonMethod.ConvertJsonStringToObject<UserModel>(identity.Name);            
 
             if (!this.IsPostBack)
             {

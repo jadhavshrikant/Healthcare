@@ -15,6 +15,19 @@ namespace Healthcare.Web.App_Code
     /// </summary>
     public class BasePage : System.Web.UI.Page
     {
+        #region Properties
+
+        /// <summary>
+        /// token
+        /// </summary>
+        public string token { get; set; }
+
+        /// <summary>
+        /// userId
+        /// </summary>
+        public int userId { get; set; }
+        #endregion
+
         #region Events
 
         /// <summary>
@@ -37,6 +50,7 @@ namespace Healthcare.Web.App_Code
         {
             bool isValid = true;
             var identity = User.Identity as ClaimsIdentity;
+            token = identity.Name;
             if (!Request.IsAuthenticated || !identity.IsAuthenticated)
             {
                 isValid = false;
@@ -44,6 +58,7 @@ namespace Healthcare.Web.App_Code
             if (isValid)
             {
                 UserModel userModel = CommonMethod.ConvertJsonStringToObject<UserModel>(identity.Name);
+                userId = userModel.UserId;
                 if (userModel.UserId < 0)
                 {
                     isValid = false;
