@@ -43,6 +43,10 @@ namespace Healthcare.Web
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// loadDefaultMethod
+        /// </summary>
         private void loadDefaultMethod()
         {
             CommonConstant.ServiceAddressURL = ConfigurationManager.AppSettings["ServiceAddressURL"];

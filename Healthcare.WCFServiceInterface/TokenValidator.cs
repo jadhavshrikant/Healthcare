@@ -14,7 +14,11 @@ namespace Healthcare.WCFServiceInterface
     /// </summary>
     public class TokenValidator
     {
+        #region Properties
         private const int aliveDurationMinutes = 15;
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Checks if the token is still alive with a 1-second tolerance.
@@ -57,5 +61,6 @@ namespace Healthcare.WCFServiceInterface
                 throw new FaultException("Service Authorization can not be done for unauthenticated user.");
             return isValid;
         }
+        #endregion
     }
 }
