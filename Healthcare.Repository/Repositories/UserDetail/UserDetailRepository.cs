@@ -52,6 +52,8 @@ namespace Healthcare.Repository.Repositories.UserDetail
                     if (userDetail.Password.Equals(currentPassword))
                     {
                         userDetail.UserId = row["USER_ID"] as int? ?? 0;
+                        userDetail.FirstName = row["FIRST_NAME"] as string ?? string.Empty;
+                        userDetail.LastName = row["LAST_NAME"] as string ?? string.Empty;
                         userDetail.ResultType = 1;
                     }
                 }
