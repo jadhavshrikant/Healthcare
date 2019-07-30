@@ -16,7 +16,7 @@
     <ul class="nav navbar-right navbar-top-links">
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw"></i><%: Convert.ToString(HttpContext.Current.Session["Username"]) %> <b class="caret"></b>
+                <i class="fa fa-user fa-fw"></i><%: Convert.ToString(HttpContext.Current.Session["FullName"]) %> <b class="caret"></b>
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <li>
