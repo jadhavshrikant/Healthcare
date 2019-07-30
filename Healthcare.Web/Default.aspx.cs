@@ -12,6 +12,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using Healthcare.Web.App_Code;
 #endregion
 
 namespace Healthcare.Web
@@ -94,6 +95,9 @@ namespace Healthcare.Web
                                         new Claim(ClaimsIdentity.DefaultNameClaimType, userModel.Token)},
                                     DefaultAuthenticationTypes.ApplicationCookie)
                                 );
+
+                            SessionManager.setUserSession(userModel);
+
                             isValid = true;
                             Response.Redirect("~/Dashboard.aspx");
                         }
