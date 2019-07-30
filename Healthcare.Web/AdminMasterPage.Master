@@ -1,0 +1,52 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminMasterPage.master.cs" Inherits="Healthcare.Web.AdminMasterPage" %>
+
+<%@ Register Src="~/UserControls/NavigationUserControl.ascx" TagPrefix="ucNavigation" TagName="Navigation" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Healthcare Inc.</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="Content/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="Content/metisMenu.min.css" rel="stylesheet">
+    <!-- Timeline CSS -->
+    <link href="Content/timeline.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="Content/startmin.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="Content/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div id="wrapper">
+            <!-- Navigation -->
+            <div id="dvNavigation">
+                <ucNavigation:Navigation ID="uvNavigation" runat="server" />
+            </div>
+
+            <div id="page-wrapper">
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+            <!-- /#page-wrapper -->
+        </div>
+        <!-- /#wrapper -->
+        <!-- jQuery -->
+        <script src="Scripts/jquery.min.js"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="Scripts/bootstrap.min.js"></script>
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="Scripts/metisMenu.min.js"></script>
+        <!-- Custom Theme JavaScript -->
+        <script src="Scripts/startmin.js"></script>
+    </form>
+</body>
+</html>
